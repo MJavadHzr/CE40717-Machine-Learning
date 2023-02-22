@@ -1,0 +1,12 @@
+0	FoodType;Price;Location;Constraints;Label
+1	FastFood;Cheap;West;Vegeterian;0
+2	Iranian;Normal;North;Gluten;0
+3	Asian;Normal;North;none;0
+4	Asian;Expensive;East;Vegeterian;0
+5	Asian;Cheap;West;Vegeterian;1
+6	FastFood;Normal;North;none;1
+7	Iranian;Cheap;North;none;1
+8	Asian;Cheap;East;Gluten;0
+9	FastFood;Expensive;West;none;0
+10	Iranian;Normal;East;Vegeterian;1
+11	Asian;Normal;East;Gluten;1
