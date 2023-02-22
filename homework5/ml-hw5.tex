@@ -1,0 +1,409 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{temp}
+\usepackage{epsfig,graphicx,subfigure,amsthm,amsmath, float, xcolor, changepage, mathtools, textcomp, hyperref, bm, amssymb, tcolorbox, tikz, setspace, mathrsfs}
+\usepackage[shortlabels]{enumitem}
+\usepackage[bottom]{footmisc}
+\usepackage{xepersian}
+\settextfont[Scale=1]{XBZar}
+%\setdigitfont{XBZar}
+\setlatintextfont[Scale=0.9]{Times New Roman}
+\hypersetup{
+	colorlinks=true,
+	urlcolor=blue!70!black
+}
+
+\newcommand{\myeq}[1]
+{\stackrel{\mathclap{{\scriptsize \mbox{#1}}}}{=}}
+
+%\normalfont
+
+\doublespacing
+\begin{document}
+\handout
+{یادگیری ماشین}
+{نیم‌سال اول ۰۱\lr{-}۰۰}
+{دکتر عباس حسینی}
+{دانشکده مهندسی کامپیوتر}
+{تمرین پنجم}
+{محمد‌جواد هزاره}
+{98101074}
+\noindent
+\\ [-6em]
+\section*{سوال ۱}
+\begin{enumerate}
+	\item
+	در الگوریتم
+	\lr{k-means}
+	خوشه‌ها به صورت دایروی خواهند بود در حالی که در الگوریتم 
+	\lr{EM}
+	حالت کلی‌ای برای خوشه‌ها فرض کرده‌ایم که با ماتریس $\Sigma$ برای هر خوشه مشخص می‌شود. در این الگوریتم قیدی روی دایروی بودن خوشه‌ها نیست و خوشه‌ها به شکل بیضی فرض شده‌اند. علاوه بر آن، در الگوریتم \lr{EM} داده‌ها به صورت \lr{soft} به خوشه‌ها تخصیص داده می‌شوند، به این معنا که برای هر داده، به میزان اعتقادی که برای تعلق آن به خوشه $k$ام داریم، آن را در تعیین پارامترهای مدل $k$ام دخیل می‌کنیم. این دو الگوریتم می‌توانند عملکرد یکسانی داشته باشند به شرط آن‌که در اجرای 
+	\lr{EM}
+	، ماتریس کوواریانس مدل‌ها، $\Sigma_k$ها رابه صورت $\alpha\bm{I}$ در نظر بگیریم که $\bm{I}$ ماتریس واحد است. با این کار خوشه‌ها در الگوریتم
+	\lr{EM}
+	، مشابه الگوریتم \lr{k-means} دایروی و با شعاع برابر خواهند شد.
+	\item
+	برای توزیع احتمال $x_a$ به شرط $x_b$ خواهیم داشت:
+	\[
+	\begin{aligned}
+		p(x_a|x_b) &= \frac{p(x_a, x_b)}{p(x_b)} \\[0.5em]
+		&= \frac{\sum_k \pi_k \, p(x_a, x_b|k)}{p(x_b)} \\[0.5em]
+		&= \sum_k \frac{\pi_k}{p(x_b)}\,p(x_b|k)\,p(x_a|x_b, k) \\[0.5em]
+		&= \sum_k \pi^\prime_k \, p(x_a | x_b, k), \quad \pi^\prime_k = \frac{\pi_k\,p(x_b|k)}{p(x_b)}
+	\end{aligned}
+	\]
+	که 
+	$p(x_b|k) = \sum_{x_a}p(x_a,x_b|k)$
+	و
+	$p(x_b) = \sum_{x_a} p(x_a, x_b)$،
+	بنابراین برای ضرایب داریم:
+	\[
+	\boxed{\pi^\prime_k = \frac{\pi_k\sum_{x_a}p(x_a, x_b|k)}{\sum_{x_a}p(x_a, x_b)}}
+	\]
+	\item
+	مطابق الگوریتم، کران پایین درست‌نمایی به صورت زیر خواهد بود که $k$ اندیس مربوط به خوشه‌ها و $i$ اندیس مربوط به داده‌هاست:
+	\[
+	F(\theta, Q) = \sum_i \left[\sum_k Q_i^{(t)}(k) \log\left(\frac{p(x^{(i)}, k; \theta)}{Q_i^{(t)}(z)}\right)\right]
+	\]
+	که
+	$Q_i^{(t)}(z)$
+	پارامتر مربوط به داده‌ی $i$ام است که در مرحله‌ی $t$ و \lr{E} بدست آمده است. در واقع همان اعتقادی است که به عضویت داده‌ی $i$ام به خوشه‌ی $z$ داریم. احتمال داده‌ی $i$ام و خوشه‌ی $k$ به صورت زیر خواهد بود:
+	\[
+	\begin{aligned}
+		p(x^{(i)}, k; \theta) &= p(k)\,p(x^{(i)}|k) \\
+		&= \pi_k \,|2\pi\Sigma|^{-\frac{1}{2}} \exp\left(-\frac{1}{2}(x^{(i)}-\mu_k)^T\Sigma^{-1}(x^{(i)}-\mu_k)\right)
+	\end{aligned}
+	\]
+	بنابراین:
+	\[
+	\begin{aligned}
+		\theta^{(t+1)} &= \argmax_\theta \; F(\theta, Q^{(t)}) \\[0.5em]
+		&= \argmax_\theta \sum_i\left[\sum_k Q_i^{(t)}(k) \log p(x^{(i)}, k; \theta) \right] \\[0.5em]
+		&= \argmax_\theta \sum_i\left[\sum_k Q_i^{(t)}(k) \left(\log \pi_k -\frac{d}{2} \log 2\pi + \frac{1}{2}\log|\Sigma^{-1}| -\frac{1}{2}(x^{(i)}-\mu_k)^T\Sigma^{-1}(x^{(i)}-\mu_k) \right) \right]
+	\end{aligned}
+	\]
+	 که $d$ بعد داده‌هاست. با توجه به رابطه‌ی بالا، جواب این معادله برای $\pi_k$ها و $\mu_k$ها تفاوتی با روش معمول \lr{EM} ندارد. اما برای پیدا کردن $\Sigma$ داریم:
+	\[
+	\begin{aligned}
+		\frac{\partial f(\pi_k, \mu_k, \Sigma)}{\partial \Sigma} &= \frac{\partial f(\pi_k, \mu_k, \Sigma)}{\partial \Sigma^{-1}} \times \frac{\partial \Sigma^{-1}}{\partial \Sigma} \\[0.5em]
+		 &=\frac{\partial \Sigma^{-1}}{\partial \Sigma} \, \sum_i\left[\sum_k Q_i^{(t)}(k) \left(\frac{1}{2}\Sigma^T -\frac{1}{2} (x^{(i)}-\mu_k)(x^{(i)}-\mu_k)^T\right) \right]
+	\end{aligned}
+	\]
+	با صفر قرار دادن رابطه‌ی بالا به ازای
+	$\hat{\Sigma}$
+	و
+	$\hat{\mu_k}$
+	ها و توجه به این نکته که ماتریس کوواریانس ماتریسی متقارن است، خواهیم داشت: (	که 
+	$\hat{\mu_k}$
+	تخمین $\mu_k$ها در همین مرحله و $N$ تعداد کل داده‌ها است.)
+	\[
+	\begin{gathered}
+		\frac{\partial \Sigma^{-1}}{\partial \Sigma} \, \sum_i\left[\sum_k Q_i^{(t)}(k) \left(\frac{1}{2}\hat{\Sigma}^T -\frac{1}{2} (x^{(i)}-\hat{\mu_k})(x^{(i)}-\hat{\mu_k})^T\right) \right] = 0 \\[0.5em]
+		\implies \sum_i\left[\hat{\Sigma}^T - \sum_k Q_i^{(t)}(k) (x^{(i)}-\hat{\mu_k})(x^{(i)}-\hat{\mu_k})^T \right] = 0 \\[0.5em]
+		\implies \boxed{\hat{\Sigma} = \frac{1}{N} \sum_i\left[ \sum_k Q_i^{(t)}(k)\;(x^{(i)}-\hat{\mu_k})(x^{(i)}-\hat{\mu_k})^T\right]}
+	\end{gathered}
+	\]
+
+\pagebreak
+\end{enumerate}
+\section*{سوال ۲}
+\begin{enumerate}
+	\item
+	داده‌های مسئله را 
+	$\mathcal{D} = \{x^{(i)}\}_{i=1}^{N}$
+	در نظر می‌گیریم که 
+	$x^{(i)}\in \mathbb{N}$.
+	بنابراین کران پایین درست‌نمایی برابر خواهد بود با:
+	\[
+	F(\theta, Q) = \sum_i\left[\sum_k Q_i(k) \log\left(\frac{p(x^{(i)}, k; \theta)}{Q_i(k)}\right) \right]
+	\]
+	مطابق الگوریتم \lr{EM}، در مرحله‌ی \lr{E} با استفاده از پارامترها تا این لحظه، تابع $F$ را با ثابت نگه داشتن $\theta$، نسبت به $Q$ بیشینه می‌کنیم. بنابراین در مرحله‌ی \lr{E} داریم:
+	\[
+	Q_i^{(t)} = \argmax_Q F(\theta^{(t)}, Q)
+	\]
+	که جواب این بهینه‌سازی برابر با احتمال شرطی $z$ به شرط دیدن داده‌ی $i$ام است. یا به عبارتی:
+	\[
+	Q_i^{(t)}(z) = p(z|x^{(i)}; \theta^{(t)})
+	\]
+	که برای این مسئله داریم:
+	\[
+	\begin{aligned}
+		Q_i^{(t)}(k) &= \frac{p(k, x^{(i)}; \theta^{(t)})}{p(x^{(i)}; \theta^{(t)})} \\[0.6em]
+		&= \boxed{\frac{\pi_k e^{-\theta_k}\frac{\theta_k^{x^{(i)}}}{x^{(i)}!}}{\sum_j \pi_j e^{-\theta_j}\frac{\theta_j^{x^{(i)}}}{x^{(i)}!}}}
+	\end{aligned}
+	\]
+	که پارامترهای $\theta_k$ از $\theta^{(t)}$ آمده اند که برای جلوگیری از شلوغ شدن رابطه،
+	$^{(t)}$
+	برای آن‌ها نیامده است.
+	
+	سپس در مرحله‌ی \lr{M} با استفاده از رابطه‌ی بدست آمده برای $Q$، تابع $F$ را با ثابت نگه داشتن $Q$ نسبت به $\theta$ بیشینه می‌کنیم. بنابراین:
+	\[
+	\begin{aligned}
+		\theta^{(t+1)} &= \argmax_\theta F(\theta, Q^{(t)}) \\
+		&= \argmax_\theta \sum_i\left[\sum_k Q_i^{(t)}(k) \log p(x^{(i)}, k; \theta)\right]
+	\end{aligned}
+	\]
+	برای احتمال مشترک نیز داریم:
+	\[
+	p(x^{(i)}, k; \theta) = \pi_k e^{-\theta_k}\frac{\theta_k^{x^{(i)}}}{x^{(i)}!}
+	\]
+	بنابراین:
+	\[
+	\theta^{(t+1)} = \argmax_\theta \sum_i\left[\sum_k Q_i^{(t)}(k)\left(\log \pi_k - \theta_k + x^{(i)}\log \theta_k \right)\right]
+	\]
+	هم‌چنین می‌دانیم که
+	$\sum_k \pi_k = 1$.
+	بنابراین از روش ضرایب لاگرانژ استفاده می‌کنیم. برای لاگرانژ داریم:
+	\[
+	L(\bm{\pi}, \bm{\theta}, \lambda) = \sum_i\left[\sum_k Q_i^{(t)}(k)\left(\log \pi_k - \theta_k + x^{(i)}\log \theta_k \right)\right] - \lambda(\sum_k \pi_k - 1)
+	\]
+	برای مشتق‌ها خواهیم داشت:
+	\[
+	\begin{dcases}
+		\frac{\partial L}{\partial \pi_j} = \sum_i\left[Q_i^{(t)}(j) \frac{1}{\pi_j}\right] - \lambda \\[0.5em]
+		\frac{\partial L}{\partial \theta_j} = \sum_i\left[Q_i^{(t)}(j)(-1 + \frac{x^{(i)}}{\theta_j}) \right] \\[0.5em]
+		\frac{\partial L}{\partial \lambda} = \sum_k \pi_k - 1
+	\end{dcases}
+	\]
+	که با صفر قرار دادن روابط بالا به ازای
+	$\theta_j^{(t+1)}$
+	و
+	$\pi_j^{(t+1)}$،
+	به نتابج زیر می‌رسیم:
+	\[
+	\boxed{
+	\begin{dcases}
+		\pi_k^{(t+1)} = \frac{\sum_i Q_i^{(t)}(k)}{\sum_j\sum_i Q_i^{(t)}(j)} = \frac{\sum_i Q_i^{(t)}(k)}{N} \\[0.6em]
+		\theta_k^{(t+1)} = \frac{\sum_i x^{(i)}\,Q_i^{(t)}(k)}{\sum_i Q_i^{(t)}(k)}
+	\end{dcases}
+	}
+	\]
+	\item
+	در این قسمت می‌خواهیم بهینه‌سازی‌ای که در قسمت قبل و در مرحله‌ی \lr{E} استفاده کردیم را اثبات کنیم. در واقع می‌خواهیم نشان دهیم جواب بهینه‌سازی
+	$\argmax_Q F(\theta^{(t)}, Q)$
+	به صورت
+	$Q_i^{(t)}(z) = p(z|x^{(i)}; \theta^{(t)})$
+	است. برای این منظور داریم:
+	\[
+	Q^{(t)} = \argmax_Q \sum_i\left[\sum_k Q_i(k) \left(\log p(x^{(i)}, k; \theta^{(t)}) - \log Q_i(k)\right) \right]
+	\]
+	هم‌چنین برای هر $i$ قیدی به صورت
+	$\sum_k Q_i(k) = 1$
+	داریم.	بنابراین برای بهینه‌سازی از روش ضرایب لاگرانژ استفاده می‌کنیم. لاگرانژ به صورت زیر خواهد بود:
+	\[
+	L(\bm{Q}, \bm{\lambda}) = \sum_i\left[\sum_k Q_i(k) \left(\log p(x^{(i)}, k; \theta^{(t)}) - \log Q_i(k)\right) \right] - \sum_i\left[ \lambda_i\left(\sum_k Q_i(k) - 1\right)\right]
+	\]
+	برای حل این بهینه‌سازی، باید دقت کنیم که $Q_i$ها تابع هستند. اما برای حل می‌توان آن‌ها را به صورت سطرهای یک ماتریس در نظر گرفت چرا که دامنه‌ی $k$ گسسته و محدود است. اگر $N$‌ تعداد داده‌ها و $K$ تعداد خوشه‌ها باشد، ماتریس
+	$A_{N\times K}$
+	را به این صورت که 
+	$A_{ij} = Q_i(j)$
+	در نظر می‌گیریم. هدف پیدا کردن درایه‌های این ماتریس خواهد بود. بنابراین:
+	\[
+	L(A, \bm{\lambda}) = \sum_i\left[\sum_k A_{ik} \left(\log p(x^{(i)}, k; \theta^{(t)}) - \log A_{ik}\right) \right] - \sum_i\left[ \lambda_i\left(\sum_k A_{ik} - 1\right)\right]
+	\]
+	برای مشتق‌ها خواهیم داشت:
+	\[
+	\begin{dcases}
+		\frac{\partial L}{\partial A_{ij}} = \log p(x^{(i)}, j; \theta^{(t)}) - \log A_{ij} - 1 - \lambda_i \\[0.5em]
+		\frac{\partial L}{\partial \lambda_i} = \sum_j A_{ij} - 1
+	\end{dcases}
+	\]
+	با صفر قرار دادن روابط بالا به ازای 
+	$A^\ast_{ij}$
+	و
+	$\lambda^\ast_j$
+	خواهیم داشت:
+	\[
+	\begin{dcases}
+		(1) &\log p(x^{(i)}, j; \theta^{(t)}) - \log A^\ast_{ij} - 1 - \lambda^\ast_i = 0 \\[0.5em]
+		(2) &\sum_j A^\ast_{ij} - 1 = 0
+	\end{dcases}
+	\]
+	با حل رابطه‌ی $(1)$ برای
+	$A^\ast_{ij}$
+	بر حسب 
+	$\lambda^\ast_i$
+	به نتیجه‌ی زیر می‌رسیم:
+	\[
+	A^\ast_{ij} = p(x^{(i)}, j; \theta^{(t)}) \, e^{-(1+\lambda^\ast_i)}
+	\]
+	با قرار دادن این رابطه در معادله‌ی $(2)$ ادامه می‌دهیم:
+	\[
+	e^{-(1+\lambda^\ast_i)} \sum_j p(x^{(i)}, j; \theta^{(t)}) = 1 \implies 1+\lambda^\ast_i = \log p(x^{(i)}; \theta^{(t)}) 
+	\]
+	حال این نتیجه را در معادله‌ی $(1)$ قرار می‌دهیم:
+	\[
+	\begin{gathered}
+		\log  p(x^{(i)}, j; \theta^{(t)}) - \log A^\ast_{ij} - \log p(x^{(i)}; \theta^{(t)})  = 0 \\[0.5em]
+		\implies \log \left(\frac{p(x^{(i)}, j; \theta^{(t)})}{A^\ast_{ij}\,p(x^{(i)}; \theta^{(t)})}\right) = 0 \\[0.5em]
+		\implies A^\ast_{ij} = \frac{p(x^{(i)}, j; \theta^{(t)})}{p(x^{(i)}; \theta^{(t)})} \\[0.5em]
+		\implies \boxed{A^\ast_{ij} = p(j|x^{(i)}; \theta^{(t)})}
+	\end{gathered}
+	\]
+	بنابراین با توجه به تعریف $A$، داریم 
+	$Q^{(t)}_i(k) = p(k|x^{(i)}; \theta^{(t)})$
+	و خواسته‌ی مسئله اثبات می‌شود.
+\end{enumerate}
+
+\pagebreak
+\section*{سوال ۳}
+\begin{enumerate}
+	\item
+	احتمال این‌که $w_t$ برد در روز $t$ داشته باشیم به شرط آن‌که بدانیم در این روز در کل $m_t$ بازی انجام شده و بازیکن $k$ام بازی می‌کرده است، با فرض این‌که نتیجه بازی‌ها از یکدیگر مستقل بوده و بازیکن $k$ام با احتمال $p_k$ بازی خود را می‌برد، برابر خواهد بود با:
+	\[
+	w_t|m_t,k \sim Bin(m_t, p_k) \implies p(w_t|m_t, k) = \binom{m_t}{w_t}p_k^{w_t}(1-p_k)^{m_t-w_t}
+	\]
+	برای احتمال این‌که $w_t$ برد داشته باشیم به شرط آن‌که بدانیم در این روز تعداد $m_t$ بازی صورت گرفته، برابر خواهد بود با:
+	\[
+	\begin{aligned}
+		p(w_t|m_t) &= \sum_k p(w_t, k|m_t) \\[0.4em]
+		&= \sum_k p(k|m_t)\,p(w_t|k, m_t) \\[0.4em]
+		&= \sum_k \pi_k \binom{m_t}{w_t}p_k^{w_t}(1-p_k)^{m_t-w_t}
+	\end{aligned}
+	\]
+	\item
+	می‌دانیم در مرحله‌ی \lr{E}، مقدار $Q$ به صورت 
+	$Q^{(i)}_t(z_t) = p(z_t|x_t;\theta^{(i-1)})$
+	آپدیت می‌شود. بنابراین در این مسئله داریم:
+	\[
+	\begin{aligned}
+		Q_t^{(i)}[k] &= p(k|w_t, m_t; \theta^{(i-1)}) \\[0.6em]
+		&= \frac{p(k, w_t, m_t)}{p(w_t, m_t)} \\[0.6em]
+		&= \frac{p(k)\,p(m_t|k)\,p(w_t|m_t,k)}{p(m_t)\,p(w_t|m_t)} \\[0.6em]
+		&= \boxed{\frac{\pi_k^{(i-1)} \binom{m_t}{w_t} \left(p_k^{(i-1)}\right)^{w_t} \left(1-p_k^{(i-1)}\right)^{m_t-w_t}}{\sum_j \pi_j^{(i-1)} \binom{m_t}{w_t} \left(p_j^{(i-1)}\right)^{w_t} \left(1-p_j^{(i-1)}\right)^{m_t-w_t}}}
+	\end{aligned}
+	\]
+	که با توجه به مستقل بودن $m_t$ از $k$،
+	$p(m_t|k)$
+	از صورت با
+	$p(m_t)$
+	از مخرج ساده شده است.
+	\item
+	اگر کران پایین درست‌نمایی را با $F(\theta, Q)$ نشان دهیم، آن‌گاه خواهیم داشت:
+	\[
+	F(\theta, Q) = \sum_t\left[ \sum_k Q_t[k] \log\left(\frac{p(x_t, k; \theta)}{Q_t[k]}\right) \right] 
+	\]
+	حال برای پیدا کردن بیشینه‌ی این تابع به روش الگوریتم \lr{EM}، باید $Q$ را ثابت و برابر مقدار به دست آمده در مرحله‌ی \lr{E} در نظر گرفت و سپس $F$ را نسبت به $\theta$ بیشینه کنیم. بنابراین:
+	\[
+	\begin{aligned}
+		\theta^{(i)} &= \argmax_\theta F(\theta, Q^{(i)}) \\[0.5em]
+		&= \argmax_\theta \sum_t\left[\sum_k Q_t^{(i)}[k] \left(\log p(x_t, k; \theta) - \log Q_t^{(i)}[k]\right)\right] \\[0.5em]
+		&= \argmax_\theta \sum_t \left[\sum_k Q_t^{(i)}[k] \log p(x_t, k; \theta)\right]
+	\end{aligned}
+	\]
+	برای احتمال داده‌ی $t$ام نیز داریم:
+	\[
+	\begin{aligned}
+		p(w_t, m_t, k; \theta) &= p(k)\,p(m_t|k)\,p(w_t|m_t, k) \\[0.5em]
+		&= \pi_k \binom{m_t}{w_t} p_k^{w_t}(1-p_k)^{m_t-w_t}\,p(m_t|k)		
+	\end{aligned}
+	\]
+	با جایگذاری این رابطه در رابطه‌ی مربوط به تتا و در نظر گرفتن این موضوع که $p(m_t|k)$ مستقل(از لحاظ تابع، نه از لحاظ احتمالاتی) از $\theta$ است، خواهیم داشت:
+	\[
+	\theta^{(i)} = \argmax_{\pi_k, p_k} \sum_t\left[\sum_k Q_t^{(i)}[k] \left(\log \pi_k + w_t\log p_k + (m_t-w_t)\log(1-p_k)\right) \right]
+	\]
+	برای پیداکردن
+	$p_j^{(i)}$
+	کافیست از رابطه‌ی بالا مشتق گرفته و برابر صفر قرار دهیم. بنابراین:
+	\[
+	\frac{\partial f(\pi_k, p_k)}{\partial p_j} = \sum_t\left[Q_t^{(i)}[j] \left(\frac{w_t}{p_j} - \frac{(m_t-w_t)}{1-p_j}\right)\right]
+	\]
+	و با صفر قرار دادن رابطه‌ی بالا به ازای
+	$p_j^{(i)}$
+	به نتیجه‌ی زیر می‌رسیم:
+	\[
+	\boxed{p_j^{(i)} = \frac{\sum_{t=1}^n Q_t^{(i)}[j]\,w_t}{\sum_{t=1}^n Q_t^{(i)}[j]\,m_t}}
+	\]
+\end{enumerate}
+
+\pagebreak
+\section*{سوال ۴}
+\begin{enumerate}
+	\item
+	لگاریتم احتمال پسین به صورت زیر به احتمال پیشین پارامتر و درست‌نمایی بستگی خواهد داشت:
+	\[
+	\log p(\theta|X) = \log p(\theta) + \log p(X|\theta) + Const
+	\]
+	بنابراین $\theta$ای که احتمال پیشین را بیشینه کند، عبارت سمت راست را نیز بیشینه خواهد کرد. هدف حل مسئله‌ی زیر است:
+	\[
+	\theta^\ast = \argmax_\theta \left(\log p(\theta) + \log p(X|\theta) \right)
+	\]
+	برای حل این مسئله به روش \lr{EM}، نخست کران پایینی روی تابع هدف پیدا می‌کنیم. برای این کار تابع زیر را ارائه می‌کنیم:
+	\[
+	\bar{F}(\theta, Q) = F(\theta, Q) + \log p(\theta)
+	\]
+	که $F$ همان تابعی است که در روش \lr{MLE} استفاده می‌کردیم و برابر با:
+	\[
+	F(\theta, Q) = \sum_i\left[\sum_k Q_i(k) \log \left(\frac{p(x^{(i)}, k; \theta)}{Q_i(k)}\right)\right]
+	\]
+	اثبات کران پایین بودن تابع ارائه شده نیز سر راست است. برای $F$ که با توجه به محاسبات قبلی و نامساوی \lr{Jesnen} می‌دانیم
+	$F(\theta, Q) \ge \log p(X|\theta)$،
+	و با اضافه کردن
+	$\log p(\theta)$
+	به دو طرف نامعادله نیز به نتیجه‌ی خواسته شده یعنی
+	$\bar{F}(\theta, Q) \ge \log p(X|\theta) + \log p(\theta) = \log p(\theta|X)$
+	می‌رسیم.
+	
+	بنابراین مراحل الگوریتم \lr{EM} به صورت زیر خواهد بود:
+	\[
+	\begin{aligned}
+		&\text{E}: && Q^{(t)} = \argmax_Q \bar{F}(\theta^{(t)}, Q) = \argmax_Q F(\theta^{(t)}, Q) \\
+		&\text{M}: && \theta^{(t+1)} = \argmax_\theta \bar{F}(\theta, Q^{(t)})
+	\end{aligned}
+	\]
+	که در تساوی دوم مرحله‌ی \lr{E}، از استقلال جبری $\log p(\theta)$ از $Q$ استفاده شده است.
+	\item
+	داده‌ی ورودی مسئله را به صورت
+	$(n_b, n_d)$
+	در نظر می‌گیریم. متغیر نهان مسئله نیز همان $n_a$ خواهد بود. با مشخص شدن این سه متغیر مقدار $n_c$ از روی معادله‌ی 
+	$n_a + n_b + n_c + n_d = n$
+	مشخص خواهد شد. یک سمپل در این مسئله برابر با یک دوتایی $(n_b, n_d)$ خواهد بود. بنابراین در این نمونه از مسئله‌ی داده شده فقط یک سمپل داریم. (بنابراین اندیس‌های $i$ را می‌توان از تمام معادلات حذف کرد.) برای احتمال دیدن $n_a$
+	، $n_b$
+	، $n_c$
+	و $n_d$ خواهیم داشت:
+	\[
+	p(n_a, n_b, n_c, n_d; \theta) = \frac{n!}{n_a!n_b!n_c!n_d!} \left(\frac{1}{3}\right)^{n_a}\left(\frac{1}{3}(1-\theta)\right)^{n_b} \left(\frac{2}{3}\theta\right)^{n_c} \left(\frac{1}{3}(1-\theta)\right)^{n_d}
+	\]
+	با توجه به قسمت اول سوال، برای مرحله‌ی \lr{E} داریم:
+	\[
+	Q^{(t)} = \argmax_Q \sum_k Q(k) \log\left(\frac{p(n_b, n_d, n_a=k; \theta)}{Q(k)}\right)
+	\]
+	که حل این معادله مشابه قبل بوده و جواب آن برابر
+	$p(n_a=k|n_b, n_d; \theta^{(t)})$
+	خواهد بود. بنابراین:
+	\[
+	\begin{aligned}
+		Q^{(t)} &= p(n_a=k|n_b,n_d; \theta^{(t)}) \\[0.6em]
+		&= \frac{p(n_a=k, n_b, n_d)}{\sum_j p(n_a=j, n_b, n_d)} \\[0.6em]
+		&= \frac{\frac{n!}{k!n_b!n_c!n_d!}3^{-n}(1-\theta)^{n_b+n_d}(2\theta)^{n_c}} {\sum_j \frac{n!}{j!n_b!n_c!n_d!}3^{-n}(1-\theta)^{n_b+n_d}(2\theta)^{n_c}}, \quad n_c = n - (n_a+n_b+na)
+	\end{aligned}
+	\]
+	برای مرحله‌ی \lr{M} خواهیم داشت:
+	\[
+	\begin{aligned}
+		\theta^{(t+1)} &= \argmax_\theta \; \log p(\theta) + \sum_k Q^{(t)}(k)\log\left(\frac{p(n_b, n_d, n_a=k; \theta)}{Q^{(t)}(k)}\right) \\[0.5em]
+		&= \argmax_\theta \; \log p(\theta) + \sum_k Q^{(t)}(k) \log p(n_b, n_d, n_a=k; \theta) \\
+		&= \argmax_\theta \; (v_1-1)\log \theta + (v_2-1)\log(1-\theta) + \sum_k Q^{(t)}(k) \left[(n_b+n_d)\log(1-\theta) + n_c\log\theta\right]
+	\end{aligned}
+	\]
+	برای حل این بهینه‌سازی نیز کافیست نسبت به $\theta$ مشتق گرفته و برابر صفر قرار دهیم. بنابراین:
+	\[
+	\begin{aligned}
+		\frac{d f}{d\theta} &= \frac{v_1-1}{\theta} - \frac{v_2-1}{1-\theta} + \sum_k Q^{(t)}(k)\left(\frac{n_c}{\theta} - \frac{n_b+n_d}{1-\theta}\right) \\[0.5em]
+		&= \frac{v_1-1}{\theta} - \frac{v_2-1}{1-\theta} - \frac{n_b+n_d}{1-\theta} + \sum_k Q^{(t)}(k) \frac{n - n_b - n_d - k}{\theta} \\[0.5em]
+		&= \frac{v_1-1 + n - n_b - n_d - \sum_k kQ^{(t)}(k)}{\theta}- \frac{v_2-1+n_b+n_b}{1 - \theta}
+	\end{aligned}
+	\]
+	با صفر قرار دادن رابطه‌ی بالا برای
+	$\theta^{(t+1)}$
+	خواهیم داشت:
+	\[
+	\boxed{
+	\theta^{(t+1)} = \frac{(v_1-1) + (n-n_b-n_d) - \sum_k kQ^{(t)}(k)}{(v_1+v_2-2) + n - \sum_k kQ^{(t)}(k)}
+	}
+	\]
+\end{enumerate}
+	
+\end{document}
+
+
+

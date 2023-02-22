@@ -1,0 +1,65 @@
+\ProvidesPackage{temp}
+
+\usepackage{url,amsmath,amssymb,tikz,graphicx,stmaryrd}
+
+\bibliographystyle{plain}
+
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	total={170mm,257mm},
+	left=20mm,
+	top=20mm,
+}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+
+\usetikzlibrary{arrows}
+
+\newcommand{\heading}[7]
+{
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}[c c c]{m{4in}  p{0.18in} x{2in}}
+			\LARGE \textbf{#1} && \multirow{3}{*}[0.6em]{\includegraphics[scale=0.13]{sharif-logo.png}} \\ [1em]
+			\large#2 &&\\ [0.7em]
+			\large#3 && #4 \\ [0.5em]
+			\hline
+			&&\\[-0.7em]
+			\multicolumn{3}{c}{\large \textbf{#5}}\\[0.3em]
+			\hline
+			&&\\[-0.5em]
+			#6 && #7 \\[0.3em]
+			\hline
+		\end{tabular}
+		\noindent
+	\end{table}
+}
+
+
+\newcommand{\handout}[7]{\heading
+	{#1}
+	{#2}
+	{مدرس:‌ #3}
+	{#4}
+	{#5}
+	{#6}
+	{شماره دانشجویی: #7}
+}
+
+\newcommand{\qed}{\mbox{}\hspace*{\fill}\nolinebreak\mbox{$\rule{0.6em}{0.6em}$}} %%to end your proof write $\qed$.
+
+\newenvironment{mypart}[1]
+{\begin{adjustwidth}{1.5em}{0em}
+		\makebox[0pt][l]{\makebox[1.5em][r]{\textbf{#1}.}}\ignorespaces}
+{\end{adjustwidth}}
+
+\newcommand{\prob}{{\mathbb P}}
+\newcommand{\E}{{\mathbb E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Corr}{\mathrm{Corr}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
