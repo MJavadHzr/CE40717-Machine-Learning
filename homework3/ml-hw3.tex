@@ -1,0 +1,325 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{temp}
+\usepackage{epsfig,graphicx,subfigure,amsthm,amsmath, float, xcolor, changepage, mathtools, textcomp, hyperref, bm, amssymb, tcolorbox, tikz, setspace, mathrsfs}
+\usepackage[shortlabels]{enumitem}
+\usepackage[stable]{footmisc}
+\usepackage{xepersian}
+\settextfont[Scale=1]{XBZar}
+%\setdigitfont{XBZar}
+\setlatintextfont[Scale=0.9]{Times New Roman}
+\hypersetup{
+	colorlinks=true,
+	urlcolor=blue!70!black
+}
+
+\doublespacing
+\begin{document}
+\handout
+{یادگیری ماشین}
+{نیم‌سال اول ۰۱\lr{-}۰۰}
+{سید عباس حسینی}
+{دانشکده مهندسی کامپیوتر}
+{تمرین سوم}
+{محمد‌جواد هزاره}
+{98101074}
+\noindent
+\\ [-5em]
+\section*{سوال ۱}
+\begin{enumerate}
+	\item \textbf{\lr{(c)}}.
+	زیاد بودن ضریب یک ویژگی نشان دهنده‌ی این است که با ثابت نگه داشتن سایر متغییرها و تغییر این متغییر، برچسب پیش‌بینی شده به مقدار زیادی تغییر می‌کند. در نگاه اول ممکن است این موضوع نشان دهنده‌ی این باشد که این ویژگی تاثییر زیادی در مدل دارد اما باید توجه کرد که این بزرگی ضریب می‌تواند ناشی از مقیاس آن ویژگی باشد. اگر مقیاس این ویژگی هماهنگ با سایر ویژگی‌ها نباشد، ضریب آن بسیار بزرگ یا بسیار کوچک خواهد شد. بنابراین بزرگ بودن ضریب لزوما به معنای مهم یا کم‌ اهمیت بودن آن ویژگی نیست.
+	\item
+	\begin{enumerate}[A)]
+		\item \textbf{درست}.
+		با زیاد شدن داده‌ها مدل از حالت \lr{overfitting} خارج می‌شود و پیچیدگی کنونی مدل نمی‌تواند تمام اطلاعاتی که داده‌ها در اختیارمان قرار می‌دهد را مدل کند. بنابراین زیاد کردن تعداد داده‌های آموزش، نه تنها باعث کاهش \lr{bias} نمی‌شود، بلکه آن را افزایش می‌دهد.
+		\item \textbf{غلط}.
+		با کاهش خطا روی داده‌های آموزش، مدل روی این داده‌ها فیت می‌شود و قدرت تعمیم خود را از دست خواهد داد. بنابراین لزوما کاهش خطا روی داده‌های آموزش باعث کاهش خطا روی داده‌های تست نخواهد شد.
+		\item \textbf{غلط}.
+		افزایش پیچیدگی مدل، باعث کاهش خطای آموزش می‌شود اما همواره باعث کاهش خطای تست نخواهد شد. در ابتدا که پیچیدگی مدل کم است، خطای آموزش و تست هر دو زیاد است یا به عبارتی مدل دچار \lr{underfitting} شده است. با افزایش پیچیدگی مدل، خطای آموزش به مرور کم می‌شود اما خطای تست تا جایی کم شده و پس از آن شروع به افزایش می‌کند؛ چرا که مدل به سمت فیت شدن روی داده‌های آموزش می‌رود و قدرت تعمیم خود را از دست خواهد داد.
+		\item \textbf{غلط}.
+		می‌دانیم با افزایش پیچیدگی مدل، خطای آموزش کم می‌شود. از آن جایی که با مدل چندجمله‌ای درجه 6 هنوز خطای آموزش به مقدار قابل توجهی زیاد است، کاهش دادن پیچیدگی مدل و استفاده از مدل خطی، نه تنها خطای آموزش را کاهش نداده بلکه باعث افزایش خطای آموزش نیز خواهد شد. برای کاهش خطای آموزش باید پیچیدگی مدل را افزایش داده یا به عبارتی از چندجمله‌ای‌های با درجه‌ی بالاتر استفاده کرد.
+	\end{enumerate}
+\end{enumerate}
+\section*{سوال ۲}
+\begin{enumerate}[A)]
+	\item
+	اگر از \lr{SSE} برای هزینه استفاده کنیم، آن‌گاه هزینه برحسب $\bm{\omega}$ برابر خواهد بود با:
+	\[
+	\begin{aligned}
+		SSE(\bm{\omega}) &= \|Y - \hat{Y}\|^2 \\
+		&= \|Y - X\bm{\omega}\|^2 \\
+		&= (Y-X\bm{\omega})^T(Y-X\bm{\omega}) \\
+		&= Y^TY - 2Y^TX\bm{\omega} + \bm{\omega}^T(X^TX)\bm{\omega}
+	\end{aligned}
+	\]
+	برای پیدا کردن $\bm{\omega}$ بهینه کافی‌ست مشتق عبارت بالا را در
+	$\bm{\omega}^\ast_{opt}$
+	برابر صفر قرار دهیم:
+	\[
+	\begin{aligned}
+		\frac{d}{d\bm{\omega}}& SSE(\bm{\omega}^\ast_{opt}) = -2(Y^TX)^T + 2(X^TX)\bm{\omega^\ast_{opt}} = 0\\
+		&\implies (X^TX)\bm{\omega}^\ast_{opt} = X^TY \\
+		&\implies \boxed{\bm{\omega}^\ast_{opt} = (X^TX)^{-1}X^TY}
+	\end{aligned}
+	\]
+	\item
+	اگر جمله‌ی منظم ساز \lr{L2} را به تابع هزینه اضافه کنیم، آن‌گاه:
+	\[
+	E(\bm{\omega}) = SSE(\bm{\omega}) + \lambda \bm{\omega}^T\bm{\omega}
+	\]
+	با صفر قرار دادن مشتق رابطه‌ی بالا به ازای 
+	$\bm{\omega}^\ast$
+	خواهیم داشت:
+	\[
+	\begin{aligned}
+		\frac{d}{d\bm{\omega}}& E(\bm{\omega}^\ast) = -2(Y^TX)^T + 2(X^TX)\bm{\omega}^\ast + 2\lambda\bm{\omega}^\ast = 0 \\
+		&\implies -X^TY + (X^TX)\bm{\omega}^\ast + \lambda\bm{\omega}^\ast = 0 \\
+		&\implies (X^TX + \lambda\bm{I})\bm{\omega}^\ast = X^TY \\
+		&\implies \boxed{\bm{\omega}^\ast = (X^TX + \lambda\bm{I})^{-1}X^TY}
+	\end{aligned}
+	\]
+	\item
+	\textbf{اگر}:
+	برای این قسمت می‌دانیم رابطه 
+	$\Sigma X = X F$
+	را داریم. هم‌چنین از آنجایی که $\Sigma$ ماتریس کوواریانس است، ماتریسی متقارن خواهد بود. پس برای
+	$\bm{\omega}^\ast_{new}$
+	خواهیم داشت:
+	\[
+	\begin{aligned}
+		\bm{\omega}^\ast_{new}&= \left(X^T\Sigma^{-1}X\right)^{-1}X^T\Sigma^{-1}Y \\
+			&= \left(X^TXF^{-1}\right)^{-1}X^T\Sigma^{-1}Y &&\qquad (\Sigma^{-1}X = XF^{-1}) \\
+			&= \left(X^TXF^{-1}\right)^{-1} (F^T)^{-1}X^TY &&\qquad (X^T\Sigma^{-1} = (F^{T})^{-1}X^T) \\
+			&= \left(F^T(X^TX)F^{-1}\right)^{-1} X^TY &&\qquad \big((AB)^{-1} = B^{-1}A^{-1}\big)\\
+			&= \left((F^TX^T)(XF^{-1})\right)^{-1}X^TY \\
+			&= \left(X^T\Sigma\Sigma^{-1}X\right)^{-1}X^TY \\
+			&= \left(X^TX\right)^{-1}X^TY \\
+			&= \bm{\omega}^\ast_{opt}
+	\end{aligned}
+	\]
+	\textbf{فقط اگر}:
+	برای این قسمت می‌دانیم 
+	$\bm{\omega}^\ast_{new} = \bm{\omega}^\ast_{opt}$
+	، بنابراین خواهیم داشت:
+	\[
+	\begin{aligned}
+		&\bm{\omega}^\ast_{new} = \bm{\omega}^\ast_{opt} \\
+		&\quad\implies \left(X^T\Sigma^{-1}X\right)^{-1}X^T\Sigma^{-1}Y = \left(X^TX\right)^{-1}X^TY \\
+		&\quad\implies \left(X^T\Sigma^{-1}XF\right)^{-1}X^T\Sigma^{-1} = \left(X^TX\right)^{-1}X^T \\
+		&\quad\implies X^T = \left(X^T\Sigma^{-1}X\right)\left(X^TX\right)^{-1}X^T\Sigma\\
+		&\quad\implies X = \Sigma X \left(X^TX\right)^{-1}\left(X^T\Sigma^{-1}X\right)\\
+		&\quad\implies X \left(X^T\Sigma^{-1}X\right)^{-1}\left(X^TX\right) = \Sigma X
+	\end{aligned}
+	\]
+	بنابراین اگر تعریف کنیم
+	$F = \left(X^T\Sigma^{-1}X\right)^{-1}\left(X^TX\right)$
+	، خواسته‌ی مسئله اثبات می‌شود. با توجه به وارون‌پذیر بودن $X^TX$، ماتریس $F$ نیز وارون‌پذیر خواهد بود و داریم
+	$\Sigma X = XF$.
+	\item
+	اگر داده‌های جدید
+	$\widetilde{X}$
+	با برچسب
+	$\widetilde{Y}$
+	را به داده‌های قبلی اضافه کنیم، آن‌گاه ماتریس برچسب‌ها و ماتریس داده‌ها به صورت زیر خواهد بود:
+	\[
+	\begin{dcases}
+		\bar{Y} = \begin{bmatrix}
+			Y \\
+			\widetilde{Y}
+		\end{bmatrix} \\[0.5em]
+		\bar{X} = \begin{bmatrix}
+			X \\
+			\widetilde{X}
+		\end{bmatrix}
+	\end{dcases}
+	\]
+	بنابراین برای خطای $L_1$ داده‌های جدید داریم:
+	\[
+	L(\omega, \lambda) = \|\bar{Y} - \bar{X}\omega\|^2 + \lambda \|\omega\|_1
+	\]
+	اگر بخواهیم این تابع با تابع خطای داده شده برابر باشد، ضریب $\lambda$ تابع بالا را همان ضریب خطای $L_1$ در تابع داده شده در نظر گرفته و داریم:
+	\[
+	\begin{aligned}
+		\|\bar{Y} - \bar{X}\omega\|^2 + \lambda_2 \|\omega\|_1 &=&& \|Y-X\omega\|^2 + \lambda_1 \|\omega\|_2^2 + \lambda_2 \|\omega\|_1 \\
+		\|Y-X\omega\|^2 + \|\widetilde{Y}-\widetilde{X}\omega\|^2 &=&& \|Y-X\omega\|^2 + \lambda_1 \|\omega\|_2^2 \\
+		\|\widetilde{Y}-\widetilde{X}\omega\|^2 &=&& \lambda_1 \|\omega\|_2^2 \\
+		\widetilde{Y}^T\widetilde{Y} - 2\widetilde{Y}^T\widetilde{X}\omega + \omega^T(\widetilde{X}^T\widetilde{X})\omega &=&& \lambda_1\omega^T\omega
+	\end{aligned}
+	\]
+	بنابراین بین داده‌های جدید و برچسب‌هایشان باید رابطه‌ی زیر برقرار باشد تا تابع خطاهای مذکور با یکدیگر برابر شوند:
+	\[
+	\widetilde{Y}^T\left(\widetilde{Y} - 2\widetilde{X}\omega\right) = \omega^T\left(\lambda_1 \bm{I} - \widetilde{X}^T\widetilde{X}\right)\omega
+	\]
+	اگر برچسب‌ داده‌های جدید یعنی $\widetilde{Y}$ را ماتریس صفر در نظر بگیریم، سمت چپ تساوی بالا صفر شده و اگر ماتریس داده‌های جدید یعنی $\widetilde{X}$ را برابر
+	$\sqrt{\lambda_1} \bm{I}$
+	در نظر بگیریم، سمت راست نیز صفر خواهد شد. بنابراین در این صورت خطای $L_1$ داده‌های $\bar{X}$ و $\bar{Y}$ برابر با خطای داده شده روی $X$ و $Y$ خواهد بود.
+\end{enumerate}
+\section*{سوال ۳}
+با توجه به واگرایی \lr{Kullback-Liebler} برای توزیع‌های $p(\bm{x})$ و $q(\bm{x})$ که $\bm{x}$ یک بردار $n$ بعدی است داریم:
+\[
+KL(p||q) = \int p(\bm{x}) \log\left(\frac{p(\bm{x})}{q(\bm{x})}\right) d\bm{x} = \int p(\bm{x}) \big[\log(p(\bm{x})) - \log(q(\bm{x}))\big] d\bm{x}
+\]
+با توجه به اینکه توزیع $q(\bm{x})$ یک توزیع نمایی با میانگین $\bm{\mu}$ و ماتریس کوواریانس
+$\Sigma$
+است داریم:
+\[
+\begin{aligned}
+	\log(q(\bm{x})) = & \log\left((2\pi)^{-\frac{n}{2}}|\Sigma|^{-\frac{1}{2}} \exp\big(-\frac{1}{2}(\bm{x}-\bm{\mu})^T\Sigma^{-1}(\bm{x}-\bm{\mu})\big)\right) \\[0.4em]
+	&= -\frac{n}{2}\log(2\pi) - \frac{1}{2} \log(|\Sigma|) - \frac{1}{2}(\bm{x}-\bm{\mu})^T\Sigma^{-1}(\bm{x}-\bm{\mu})
+\end{aligned}
+\]
+بنابراین برای واگرایی \lr{KL} که تابعی از $\bm{\mu}$ و $\Sigma$ خواهد بود داریم:
+\[
+KL(p||q) = f(\bm{\mu},\Sigma) = \int p(\bm{x}) \left(\log(p(\bm{x})) + \frac{n}{2} \log(2\pi) + \frac{1}{2}\log(|\Sigma|) + \frac{1}{2}(\bm{x}-\bm{\mu})^T\Sigma^{-1}(\bm{x}-\bm{\mu})\right) d\bm{x}
+\]
+برای پیدا کردن کمینه‌ی این تابع باید گرادیان $f$ را محاسبه کرده و برابر صفر قرار دهیم. برای محاسبه‌ی گرادیان، با توجه به‌این که انتگرال روی متغییر $\bm{x}$ گرفته می‌شود، می‌توان نخست از تابع زیر انتگرال مشتق گرفت و سپس انتگرال را محاسبه کرد. هم‌چنین مبنای لگاریتم را عدد نپر در نظر می‌گیریم و در نتیجه بجای $\log$ داریم $\ln$ . بنابراین برای گرادیان $f$ داریم:
+\[
+\begin{dcases}
+	\frac{\partial}{\partial \bm{\mu}} f(\bm{\mu}, \Sigma) = \int p(\bm{x}) \left(\Sigma^{-1}(\bm{x}-\bm{\mu})\right) d\bm{x} \\[0.7em]
+	\frac{\partial}{\partial \Sigma} f(\bm{\mu},\Sigma) = \int p(\bm{x}) \left(\frac{1}{2|\Sigma|}(|\Sigma|\Sigma^{-1}) - \frac{1}{2}(\bm{x}-\bm{\mu})(\bm{x}-\bm{\mu})^T \Sigma^{-1}\Sigma^{-1}\right) d\bm{x}
+\end{dcases}
+\]
+که با صفر قرار دادن روابط بالا به ازای
+$\bm{\mu}^\ast$
+و
+$\Sigma^\ast$
+داریم:
+\[
+\begin{aligned}
+&\begin{aligned}
+	\frac{\partial}{\partial \bm{\mu}} f(\bm{\mu}^\ast, \Sigma^\ast) &=\Sigma^{\ast^{-1}} \int p(\bm{x}) (\bm{x} - \bm{\mu}^\ast) d\bm{x} = 0 \\[0.6em]
+	&\implies \bm{\mu}^\ast \int p(\bm{x}) d\bm{x} = \int \bm{x} p(\bm{x}) d\bm{x} \\
+	&\implies \boxed{\bm{\mu}^\ast =  \E_p[\bm{x}]}
+\end{aligned} \\[1.5em]
+&\begin{aligned}
+	\frac{\partial}{\partial \Sigma} f(\bm{\mu}^\ast, \Sigma^\ast) &=\frac{1}{2} \left(\int p(\bm{x}) \left(\bm{I} - (\bm{x} - \bm{\mu}^\ast)(\bm{x}-\bm{\mu}^\ast)^T \Sigma^{\ast^{-1}}\right) d\bm{x}\right) \Sigma^{\ast^{-1}} = 0 \\[0.6em]
+	&\implies \bm{I} \int p(\bm{x}) d\bm{x} = \left(\int (\bm{x} - \bm{\mu}^\ast)(\bm{x}-\bm{\mu}^\ast)^Tp(\bm{x}) d\bm{x}\right)\Sigma^{\ast^{-1}} \\
+	&\implies \bm{I} = \Var_p(\bm{x}) \Sigma^{\ast^{-1}} \\
+	&\implies \boxed{\Sigma^\ast = \Var_p(\bm{x})}
+\end{aligned}
+\end{aligned}
+\]
+بنابراین بهترین تخمینی که از توزیع $p(\bm{x})$ با استفاده از توزیع‌های نرمال می‌توان داشت، توزیع نرمالی با میانگین
+$\bm{\mu}^\ast$
+و ماتریس کوواریانس
+$\Sigma^{\ast}$
+است.
+
+\section*{سوال ۴}
+\begin{enumerate}[A)]
+	\item
+	اگر برای مدل داشته باشیم 
+	$\hat{y}^{(i)} = w_jx^{(i)}_j + \epsilon$
+	، و برای تابع هزینه از $MSE$ استفاده کنیم، آن‌گاه داریم:
+	\[
+	\begin{aligned}
+		MSE(w_j) &= \frac{1}{n} \sum_{i=1}^n \left(y^{(i)} - \hat{y}^{(i)}\right)^2 \\[0.5em]
+			&= \frac{1}{n} \sum_{i=1}^n \left(y^{(i)} - w_jx_j^{(i)}\right)^2 \\
+	\end{aligned}
+	\]
+	که برای کمینه‌کردن خطا داریم:
+	\[
+	\begin{aligned}
+		\frac{d}{dw_j} MSE(w_j^\ast) &= -\frac{1}{n} \sum_{i=1}^n \left(y^{(i)} - w_j^\ast x_j^{(i)}\right)x_j^{(i)} = 0 \\[0.5em]
+		&\implies w_j^\ast \sum_{i=1}^n x_j^{(i)}x_j^{(i)} = \sum_{i=1}^n y^{(i)}x_j^{(i)} \\[0.5em]
+		&\implies w_j^\ast  (\bm{x_j}^T\bm{x_j}) = \bm{x_j}^T\bm{y} \\[0.5em]
+		&\implies \boxed{w_j^\ast = \dfrac{\bm{x_j}^T\bm{y}}{\bm{x_j}^T\bm{x_j}}}
+	\end{aligned}
+	\]
+	\item
+	می‌دانیم جواب بهینه برای بردار $\bm{w}$ اگر همه‌ی ویژگی‌ها را لحاظ کنیم، از رابطه‌ی زیر بدست می‌آید:
+	\[
+	\bm{w}^\ast = (X^TX)^{-1}X^T \bm{y}
+	\]
+	حال اگر ستون‌های $X$ را با بردارهای ستونی 
+	$\bm{x_i}$
+	نشان دهیم، آن‌گاه برای ماتریس
+	$X^TX$
+	داریم:
+	\[
+	(X^TX)_{ij} = \bm{x_i}^T\bm{x_j}
+	\]
+	که اگر بدانیم ستون‌های $X$ متعامد هستند، آن‌گاه ماتریس $X^TX$ برابر خواهد بود با:
+	\[
+	(X^TX)_{ij} = \begin{dcases}
+		0 &\quad i \ne j \\
+		\bm{x_i}^T\bm{x_i} &\quad i = j
+	\end{dcases} 
+	\]
+	حال برای حاصل‌ضرب وارون این ماتریس در ماتریس $X^T$ خواهیم داشت:
+	\[
+	X^{\dagger} = \begin{pmatrix}
+		\dfrac{1}{\bm{x_1}^T\bm{x_1}} & 0 & \cdots & 0 \\
+		0 & \dfrac{1}{\bm{x_2}^T\bm{x_2}} & \cdots & 0 \\
+		\vdots  & \vdots  & \ddots & \vdots  \\
+		0 & 0 & \cdots & \dfrac{1}{\bm{x_m}^T\bm{x_m}} 
+	\end{pmatrix}_{m\times m} \times
+	\begin{pmatrix}
+		\bm{x_1}^T \\
+		\bm{x_2}^T \\
+		\vdots \\
+		\bm{x_m}^T
+	\end{pmatrix}_{m\times n} =
+	\begin{pmatrix}
+		\frac{\bm{x_1}^T}{\bm{x_1}^T\bm{x_1}} \\
+		\frac{\bm{x_2}^T}{\bm{x_2}^T\bm{x_2}} \\
+		\vdots \\
+		\frac{\bm{x_m}^T}{\bm{x_m}^T\bm{x_m}}
+	\end{pmatrix}_{m\times n}
+	\]
+	بنابراین برای $\bm{w}$ داریم:
+	\[
+	\bm{w}^\ast = X^\dagger \bm{y} = \begin{pmatrix}
+		\frac{\bm{x_1}^T}{\bm{x_1}^T\bm{x_1}} \\
+		\frac{\bm{x_2}^T}{\bm{x_2}^T\bm{x_2}} \\
+		\vdots \\
+		\frac{\bm{x_m}^T}{\bm{x_m}^T\bm{x_m}}
+	\end{pmatrix}_{m\times n} \times \bm{y}_{n\times 1} = \begin{pmatrix}
+		\frac{\bm{x_1}^T\bm{y}}{\bm{x_1}^T\bm{x_1}} \\
+		\frac{\bm{x_2}^T\bm{y}}{\bm{x_2}^T\bm{x_2}} \\
+		\vdots \\
+		\frac{\bm{x_m}^T\bm{y}}{\bm{x_m}^T\bm{x_m}}
+	\end{pmatrix}_{m \times 1}
+	\]
+	بنابراین همانطور که دیده می‌شود، $w_j^\ast$ برابر با حالتی است که فقط از ویژگی $j$ام برای پیداکردن مقدار بهینه $w_j$ استفاده کرده بودیم.
+	\item
+	اگر از یکی از ویژگی‌ها و بایاس استفاده کرده باشیم، مدل ما به صورت
+	$\hat{y}^{(i)} = w_0 + w_jx_j^{(i)}$
+	خواهد بود. بنابراین برای $MSE$ داریم:
+	\[
+	MSE(w_0, w_j) = \frac{1}{n} \sum_{i=1}^n \left(y^{(i)} - w_0 - w_jx_j^{(i)}\right)^2
+	\]
+	برای پیدا کردن مقدار بهینه $w_0$ و $w_j$ باید گرادیان $MSE$ در نقاط بهینه صفر شود، بنابراین:
+	\[
+	\begin{dcases}
+		\frac{\partial}{\partial w_0} MSE(w_0, w_j) = -\frac{2}{n} \sum_{i=1}^n \left(y^{(i)} - w_0 - w_jx_j^{(i)}\right) \\[0.5em]
+		\frac{\partial}{\partial w_j} MSE(w_0, w_j) = -\frac{2}{n} \sum_{i=1}^n \left(y^{(i)} - w_0 - w_jx_j^{(i)}\right)x_j^{(i)}
+	\end{dcases}
+	\]
+	با صفر قراردادن روابط بالا برای $w_0^\ast$ و $w_j^\ast$ داریم:
+	\[
+	\begin{aligned}
+		\frac{\partial}{\partial w_0}&MSE(w_0^\ast, w_j^\ast) = 0 \\[0.5em]
+		&\implies \frac{\sum_{i=1}^n y^{(i)}}{n} - w_0^\ast\frac{\sum_{i=1}^n 1}{n} - w_j^\ast \frac{\sum_{i=1}^n x_j^{(i)}}{n} = 0 \\[0.5em]
+		&\implies w_0^\ast = \E[y] - w_j^\ast \E[x_j] \quad (\star)
+	\end{aligned}
+	\]
+	و با استفاده از مقدار بدست آمده برای $w_0^\ast$ داریم:
+	\[
+	\begin{aligned}
+		\frac{\partial}{\partial w_j}&MSE(w_0^\ast, w_j^\ast) = 0 \\[0.5em]
+		&\implies \frac{\sum_{i=1}^n y^{(i)}x_j^{(i)}}{n} - w_0^\ast \frac{\sum_{i=1}^n x_j^{(i)}}{n} - w_j^\ast \frac{\sum_{i=1}^n x_j^{(i)}x_j^{(i)}}{n} = 0 \\[0.5em]
+		&\implies \E[yx_j] - w_0^\ast \E[x_j] - w_j^\ast \E[x_j^2] = 0 \\[0.5em]
+		&\,\xRightarrow{(\star)} \E[yx_j] - \E[y]\E[x_j] + w_j^\ast \E[x_j]\E[x_j] - w_j^\ast \E[x_j^2] = 0 \\[0.5em]
+		&\implies w_j^\ast = \frac{\E[yx_j] - \E[y]\E[x_j]}{\E[x_j^2] - \E[x_j]^2} = \frac{\Cov(y, x_j)}{\Var(x_j)}
+	\end{aligned}
+	\]
+	بنابراین
+	$\boxed{w_j^\ast = \frac{\Cov(y, x_j)}{\Var(x_j)}}$
+	و
+	$\boxed{w_0^\ast = \E[y] - w_j^\ast \E[x_j]}$.
+\end{enumerate}
+\end{document}
+
+
+
