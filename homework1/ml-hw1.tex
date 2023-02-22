@@ -1,0 +1,382 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{temp}
+\usepackage{epsfig,graphicx,subfigure,amsthm,amsmath, float, xcolor, changepage, mathtools, textcomp, hyperref, bm, amssymb, tcolorbox, tikz, setspace}
+\usepackage[shortlabels]{enumitem}
+\usepackage[stable]{footmisc}
+\usepackage{xepersian}
+\settextfont[Scale=1.2]{XBZar}
+%\setdigitfont{XBZar}
+\setlatintextfont[Scale=1.1]{Times New Roman}
+\hypersetup{
+	colorlinks=true,
+	urlcolor=blue!70!black
+}
+
+\doublespacing
+%\onehalfspacing
+\begin{document}
+\handout
+{یادگیری ماشین}
+{نیم‌سال اول ۰۱\lr{-}۰۰}
+{سید عباس حسینی}
+{دانشکده مهندسی کامپیوتر}
+{تمرین اول}
+{محمد جواد هزاره}
+{98101074}
+\noindent
+\\ [-5em]
+\section{مقدار ویژه}
+\begin{enumerate}[1.]
+	\item
+	می‌دانیم که ماتریس $A$ را می‌توان به صورت
+	$S\Lambda S^{-1}$
+	نوشت که ماتریس $\Lambda$ ماتریسی‌ست که مقدار ویژه‌های $A$ روی قطر آن قرار گرفته‌اند و مابقی درایه‌های آن صفر است. $S$ نیز شامل بردار ویژه‌های متناظر با مقدار ویژه‌های روی قطر $\Lambda$ است که این بردار‌ها به ترتیب قرار گرفتن مقدار ویژه‌ها، در ستون‌های $S$ قرار گرفته‌اند. بنابراین داریم:
+	\[
+	\begin{aligned}
+		trace(A)	&= trace(S\Lambda S^{-1}) \\
+					&= trace(\Lambda SS^{-1}) && \quad (trace(AB) = trace(BA)) \\
+					&= trace(\Lambda) \\
+					&= \lambda_1 + \lambda_2 + \cdots + \lambda_n.
+	\end{aligned}
+	\]
+	\item
+	به طور مشابه قسمت اول، ماتریس $A$ را به صورت 
+	$S\Lambda S^{-1}$
+	می‌نویسیم، بنابراین:
+	\[
+	\begin{aligned}
+		\det(A)	&= \det(S\Lambda S^{-1}) \\
+				&= \det(S).\det(\Lambda).\det(S^{-1}) && \quad (\det(AB) = \det(A)\det(B))\\
+				&= \det(\Lambda) && \quad \left(\det(A) = \frac{1}{\det(A^{-1})}\right)\\
+				&= \lambda_1\lambda_2\cdots\lambda_n.
+	\end{aligned}
+	\]
+	\item
+	اگر $\lambda = 0$ یکی از مقدار ویژه‌های $AB$ یا $BA$ باشد، مشخصا مقدار ویژه دیگری نیز خواهد بود. بنابراین فرض کنیم
+	$\lambda \ne 0$.
+	اگر $\lambda$ مقدار ویژه $AB$ باشد، داریم:
+	\[
+	\begin{gathered}
+		ABx = \lambda x\\
+		B \times AB x = B \times \lambda x\\
+		BA (Bx) = \lambda (Bx)
+	\end{gathered}
+	\]
+	بنابراین $\lambda$ مقدار ویژه $BA$ نیز خواهد بود. اگر $\lambda$ مقدار ویژه $BA$ باشد، به طور مشابه داریم:
+	\[
+	\begin{gathered}
+		BAx = \lambda x\\
+		A \times BA x = A \times \lambda x\\
+		AB (Ax) = \lambda (Ax)
+	\end{gathered}
+	\]
+	بنابراین $\lambda$ مقدار ویژه $AB$ نیز است. پس از آن‌جایی که هر مقدار ویژه $AB$ مقدار ویژه $BA$ هم هست و بلعکس، این دو ماتریس مجموعه مقدار ویژه‌های یکسانی دارند.
+	
+	\item
+	اگر $\lambda$ مقدار ویژه ماتریس $A$ باشد، داریم 
+	$\det(A - \lambda I) = 0$.
+	نشان می‌دهیم این شرط برای ماتریس 
+	$A^T$
+	نیز برقرار است. داریم:
+	\[
+	\begin{aligned}
+		\det(A^T - \lambda I)	&= \det\left((A - \lambda I)^T\right) &&\quad ((A + B)^T = A^T + B^T, I^T = I) \\
+								&= \det(A - \lambda I) &&\quad (\det(A^T) = \det(A))\\
+								&= 0.
+	\end{aligned}
+	\]
+	در نتیجه $\lambda$ مقدار ویژه $A^T$ نیز هست. به طور مشابه می‌توان نشان داد که هر مقدار ویژه $A^T$ نیز مقدار ویژه $A$ است و درنتیجه این دو ماتریس مجموعه مقدار ویژه‌های یکسانی دارند.
+\end{enumerate}
+\qed
+
+\section{کوواریانس و امید ریاضی}
+\begin{enumerate}[1.]
+	\item
+	با استفاده از رابطه
+	$\Var(X) = \E[X^2] - \E[X]^2$
+	برای جمله اول سمت راست تساوی داریم:
+	\[
+	\begin{aligned}
+		\Var(\E[X|Y])	&= \E\left[\E[X|Y]^2\right] - \E\left[\E[X|Y]\right]^2 \\
+		&= \E\left[\E[X|Y]^2\right] - \E[X]^2
+	\end{aligned}
+	\]
+	با استفاده از رابطه
+	$\Var(X|Y) = \E[X^2|Y] - \E[X|Y]^2$
+	برای جمله دوم سمت راست تساوی داریم:
+	\[
+	\begin{aligned}
+		\E[\Var(X|Y)]	&= \E\left[ \E[X^2|Y] - \E[X|Y]^2 \right] \\
+						&= \E\left[\E[X^2|Y]\right] - \E\left[\E[X|Y]^2\right] \\
+						&= \E[X^2] - \E\left[\E[X|Y]^2\right]
+	\end{aligned}
+	\]
+	بنابراین برای جمع این عبارت‌ها داریم:
+	\[
+	\begin{aligned}
+		\Var(\E[X|Y]) + \E[\Var(X|Y)] &= \left(\E\left[\E[X|Y]^2\right] - \E[X]^2\right) + \left(\E[X^2] - \E\left[\E[X|Y]^2\right]\right) \\
+			&= \E[X^2] - \E[X]^2 \\
+			&= \boxed{\Var(X)}
+	\end{aligned}
+	\]
+	\item
+	با استفاده از رابطه داده شده، سمت چپ تساوی را باز می‌کنیم:
+	\[
+	\begin{aligned}
+		\Cov(X,Y|Z)	&= \E\left[(X - \E[X|Z])(Y - \E[Y|Z])|Z\right] \\
+					&= \E\left[\left(XY - X\E[Y|Z] - Y\E[X|Z] +\E[X|Z]\E[Y|Z]\right) |Z\right] \\
+					&= \E[XY|Z] - \E\left[(X\E[Y|Z])|Z\right] - \E\left[(Y\E[X|Z])|Z\right] + \E\left[(\E[X|Z]\E[Y|Z])|Z\right] \\
+					&= \E[XY|Z] - \E[X|Z]\E[Y|Z] - \E[Y|Z]\E[X|Z] + \E[X|Z]\E[Y|Z] \\
+					&= \boxed{\E[XY|Z] - \E[X|Z]\E[Y|Z]}
+	\end{aligned}
+	\]
+	\item
+	با استفاده از قسمت دوم، برای جمله اول سمت راست تساوی  داریم:
+	\[
+	\begin{aligned}
+		\E\left[\Cov(X,Y|Z)\right]	&= \E\left[\E [XY|Z] - \E[X|Z]\E[Y|Z]\right] \\
+									&= \E\left[\E [XY|Z]\right] - \E\left[\E[X|Z]\E[Y|Z]\right] \\
+									&= \E[XY] - \E\left[\E[X|Z]\E[Y|Z]\right] \qquad (\ast)
+	\end{aligned}
+	\label{eq:first-term}
+	\]
+	برای جمله دوم سمت راست تساوی از رابطه مشابه برای کوواریانس غیر شرطی استفاده می‌کنیم:
+	\[
+	\begin{aligned}
+		\Cov\left(\E[X|Z], \E[Y|Z]\right)	&= \E[\E[X|Z]\E[Y|Z]] - \E[\E[X|Z]]\E[\E[Y|Z]] \\
+											&= \E[\E[X|Z]\E[Y|Z]] - \E[X]\E[Y] \qquad (\ast\ast)
+	\end{aligned}
+	\]
+	بنابراین با توجه به
+	$(\ast)$
+	و 
+	$(\ast \ast)$
+	داریم:
+	\[
+	\begin{aligned}
+		\E\left[\Cov(X,Y|Z)\right] + \Cov\left(\E[X|Z], \E[Y|Z]\right)	&= \E[XY] - \E\left[\E[X|Z]\E[Y|Z]\right] + \E[\E[X|Z]\E[Y|Z]] - \E[X]\E[Y] \\
+		&= \E[XY] - \E[X]\E[Y] \\
+		&= \boxed{\Cov(X, Y)}
+	\end{aligned}
+	\]
+\end{enumerate}
+\qed
+
+\section{مشتق ماتریس}
+\begin{enumerate}
+	\item
+	برای عبارت داده شده داریم:
+	\[
+	x^TAx = \sum_{i,j} A_{ij}x_{i}x_{j}
+	\]
+	بنابراین برای درایه‌های مشتق داریم:
+	\[
+	\begin{aligned}
+		\frac{\partial}{\partial x_m} (x^TAx)	&= \frac{\partial}{\partial x_m} \sum_{i,j} A_{ij}x_i x_j \\[0.75em]
+			&= \frac{\partial}{\partial x_m} \left(\sum_{j\ne m} A_{mj}x_m x_j + \sum_{i\ne m} A_{im}x_i x_m + A_{mm}x_mx_m + \sum_{o.w.} A_{ij}x_i x_j\right) \\[0.75em]
+			&= \sum_{j\ne m} A_{mj}x_j + \sum_{i\ne m} A_{im}x_m + 2A_{mm}x_m + 0 \\[0.75em]
+			&= \left(\sum_{j\ne m} A_{mj}x_j + A_{mm}x_m\right) + \left(\sum_{i\ne m} A_{im}x_i + A_{mm}x_m\right) \\[0.75em]
+			&= \sum_{j}A_{mj}x_j + \sum_{i} A_{im} x_i \\[0.75em]
+			&= (Ax)_m + (A^Tx)_m
+	\end{aligned}
+	\]
+	بنابراین اگر فرض کنیم ماتریس $A$ ماتریسی متقارن است، آنگاه خواهیم داشت:
+	\[
+	\boxed{\frac{\partial}{\partial x}(x^TAx) = (A+A^T)x = 2Ax}
+	\]
+	\item
+	ابتدا تریس 
+	$X^TAX$
+	را به صورت جمع عناصر می‌نویسیم: (هر جا اندیسی دوبار تکرار شده است، روی آن جمع انجام می‌شود.)
+	\[
+	\begin{aligned}
+		(X^TAX)_{ij}	&= X^T_{ik}(AX)_{kj} \\
+						&= X_{ki} (A_{kl}X_{lj}) \\
+						&= A_{kl} X_{ki} X_{lj}
+	\end{aligned}
+	\]
+	بنابراین برای تریس ماتریس داریم:
+	\[
+	trace(X^TAX) = A_{kl}X_{ki}X_{li}
+	\]
+	حال برای درایه‌های ماتریس مشتق داریم:
+	\[
+	\begin{aligned}
+		\frac{\partial}{\partial X_{mn}} \, trace(X^TAX)&= \frac{\partial}{\partial X_{mn}} \left(A_{kl} X_{ki} X_{li}\right) \\[0.75em]
+		&= \frac{\partial}{\partial X_{mn}} \left(\sum_{l \ne m} A_{ml}X_{mn}X_{ln} +‌\sum_{k \ne m} A_{km}X_{kn}X_{mn} + A_{mm}X_{mn}^2 + \sum_{o.w.} A_{kl}X_{ki}X_{li}\right)\\[0.75em]
+		&= \sum_{l \ne m} A_{ml}X_{ln} + \sum_{k \ne m} A_{km}X_{kn} + 2A_{mm}X_{mn} + 0\\[0.75em]
+		&= \left(\sum_{l \ne m} A_{ml}X_{ln} + A_{mm}X_{mn}\right) + \left(\sum_{k \ne m} A_{km}X_{kn} + A_{mm}X_{mn}\right)\\[0.75em]
+		&= \sum_l A_{ml}X_{ln} + \sum_{k} A_{km}X_{kn} \\[0.75em]
+		&= (AX)_{mn} + \sum_k A^T_{mk}X_{kn} \\[0.75em]
+		&= (AX)_{mn} + (A^TX)_{mn}
+	\end{aligned}
+	\]
+	بنابراین برای مشتق داریم:
+	\[
+	\boxed{\frac{\partial}{\partial X} \, trace(X^TAX)= (A + A^T)X}
+	\]
+\end{enumerate}
+\qed
+\section{متغیر تصادفی}
+نخست
+\lr{CDF}
+را برای $\sqrt{X}$ محاسبه می‌کنیم:
+\[
+\begin{aligned}
+	\prob(\sqrt{X} \le x)	&= \prob(\sqrt{X} < 0) + \prob( 0 \ge \sqrt{X} \le x) \\
+							&= 0 + \prob(0 \le X \le x^2) \\
+							&= \int_0^{x^2} p_X(t) dt\\
+							&= x^2.
+\end{aligned}
+\]
+که در بازه
+$[0,1]$
+تعریف شده است.
+بنابراین برای
+\lr{PDF}
+داریم:
+\[
+p_{X^2}(x) =
+\begin{dcases}
+	2x	&\quad  x\in [0,1]\\
+	0	&\quad o.w.	
+\end{dcases}
+\]
+
+برای $X^2$ نیز به طور مشابه عمل می‌کنیم:
+\[
+\begin{aligned}
+	\prob(X^2 \le x)	&= \prob(-\sqrt{x} \le X \le \sqrt{X}) \\
+						&= \prob(-\sqrt{x} \le X < 0) + \prob(0 \ge X \le \sqrt{x})\\
+						&= 0 + \int_0^{\sqrt{x}} p_X(t)dt \\
+						&= \sqrt{x}.
+\end{aligned}
+\]
+که در بازه
+$[0,1]$
+تعریف شده است.
+بنابراین برای 
+\lr{PDF}
+داریم:
+\[
+p_{\sqrt{x}}(x) = 
+\begin{dcases}
+	\frac{1}{2\sqrt{x}}	&\quad x \in [0,1]\\
+	 0					&\quad o.w.
+\end{dcases}
+\]
+\qed
+\section{رنک}
+اگر $\lambda$ مقدار ویژه
+$P^{-1}MP$
+باشد، نشان می‌دهیم مقدار ویژه $M$ نیز است. برای این منظور داریم:
+\[
+\begin{gathered}
+	P^{-1}MP x = \lambda x\\
+	P \times P^{-1}MP x = P \times \lambda x\\
+	M (Px) = \lambda (Px).
+\end{gathered}
+\]
+و چون $Px$ صفر نیست چرا که می‌دانیم
+$x \ne 0$
+و $P$ فول رنک است، $\lambda$ مقدار ویژه $M$ نیز است.
+
+حال اگر $\lambda$ را مقدار ویژه $M$ در نظر بگیریم، داریم:
+\[
+\begin{gathered}
+	M x = \lambda x \\
+	M(PP^{-1}) x = \lambda x\\
+	P^{-1} \times M(PP^{-1}) x = P^{-1} \times \lambda x\\
+	P^{-1}MP (P^{-1}x) = \lambda (P^{-1}x).
+\end{gathered}
+\]
+و با استدلالی مشابه قسمت قبل داریم
+$P^{-1}x \ne 0$
+، پس $\lambda$ مقدار ویژه
+$P^{-1}MP$
+نیز است.
+
+در نتیجه دو ماتریس $M$ و
+$P^{-1}MP$
+مجموعه مقدار ویژه‌های یکسانی دارند.
+\qed
+
+\section{فاکتورگیری ماتریس}
+\begin{enumerate}
+	\item
+	از آن‌جایی که $A$ مثبت معین است، تمام مقدار ویژه‌های آن مثبت بوده و در نتیجه حاصل‌ضرب آن‌ها که همان مقدار دترمینان $A$ را مشخص می کند مقداری ناصفر است. بنابراین $A$ ماتریسی وارون‌پذیر خواهد بود. از طرفی می‌دانیم ماتریس‌های وارون‌پذیر تجزیه $LU$ یکتایی دارند به شرطی که همه‌ی عناصر روی قطر ماتریس $L$ را عدد یک نگه‌ داریم. حال فرض کنیم ماتریس $A$‌ را به صورت $LU$ تجزیه کرده و داریم $A = LU$. همینطور از آنجایی که $A$ ماتریسی متقارن است، برای ترانهاده‌ی آن نیز داریم $A^T = A = LU$. از طرفی با توجه به ترانهاده‌ی حاصل‌ضرب ماتریس‌ها داریم
+	$A = LU \implies A^T = U^TL^T$.
+	بنابراین از آنجایی که تجزیه $LU$ ماتریس $A^T$ نیز یکتاست، داریم:
+	\[
+	\left.\begin{aligned}
+		&A^T = LU \;\\
+		&A^T = U^TL^T \;\\
+	\end{aligned}\right\}\implies U = L^T
+	\]
+	بنابراین ماتریس $A$ را می‌توان به صورت $A = LL^T$ نوشت که با توجه به یکتا بودن $L$ و $U$ این تجزیه نیز یکتاست و عناصر روی قطر $L$ همگی مثبت و برابر یک هستند.
+	\item
+	با توجه به متعامد بودن $Q$ داریم
+	$A^TA = R^TQ^TQR = R^TR$
+	و در نتیجه مقدار تکین‌های $R$ همان مقدار تکین‌های $A$ خواهند بود چرا که این مقادیر مقدار ویژه‌های ماتریس $R^TR$ یا $A^TA$ هستند. بنابراین $\Sigma$ در تجزیه \lr{SVD} هر دو ماتریس $R$ و $A$‌ یکسان خواهد بود. هم‌چنین ماتریس $V$ نیز در هر دو تجزیه یکسان است، چرا که این ماتریس در تجزیه $A$ شامل بردار ویژه‌های $A^TA$ بوده که با $R^TR$ یکسان است. تنها تفاوت تجزیه \lr{SVD} ماتریس $R$ و $A$ در ماتریس $U$ این تجزیه خواهد بود. این ماتریس برای تجزیه $A$ شامل بردار ویژه‌های $AA^T$ است و برای تجزیه $R$ شامل بردار ویژه‌های $RR^T$. اگر فرض کنیم $x$ یکی از بردار ویژه‌های $AA^T$ باشد، آن‌گاه داریم:
+	\[
+	\begin{gathered}
+		AA^T \, x = \lambda x \\
+		QRR^TQ^T x = \lambda x \\
+		Q^T \times \Big(QRR^TQ^T \, x\Big) = Q^T \times \Big(\lambda x\Big) \\
+		RR^T (Q^Tx) = \lambda (Q^Tx)
+	\end{gathered}
+	\]
+	بنابراین اگر $x$ یک بردار ویژه $AA^T$ باشد، آن‌گاه $Q^Tx$ یک بردار ویژه $RR^T$ خواهد بود. در نتیجه اگر ماتریس $U$ در تجزیه $A$ را با $U_A$ نشان دهیم، آن‌گاه این ماتریس در تجزیه $R$ برابر خواهد بود با $Q^TU_A$. پس اگر تجزیه \lr{SVD} ماتریس $A$ به صورت $U\Sigma V^T$ باشد، تجزیه \lr{SVD} ماتریس $R$ به صورت $Q^TU\Sigma V^T$ خواهد بود.
+\end{enumerate}
+\qed
+\section{ماتریس \lr{Nilpotent}}
+برای نشان دادن وارون‌پذیر بودن ماتریس $I - A$ وارون آن را ارائه می‌کنیم. در این صورت هم نشان داده شده که ماتریس وارون‌پذیر است و هم وارون آن را پیدا کرده‌ایم. با توجه به این‌که می‌دانیم $A^k$ ماتریس صفر است، سعی می‌کنیم ماتریسی در $I - A$ ضرب کنیم که به عبارت $I - A^k$ برسیم. برای این کار می‌توان مشابه اتحادهای جبری، از ماتریس زیر استفاده کرد:
+\[
+A^{k-1} + A^{k - 2} + \cdots + I
+\]
+برای نشان دادن این‌که این ماتریس وارون $I-A$ است داریم:
+\[
+\begin{aligned}
+	(I - A)\times(A^{k-1} + A^{k - 2} + \cdots + I)	&= (A^{k-1} + A^{k - 2} + \cdots + I) - (A^k + A^{k-1} + \cdots + A) \\
+	&= I - A^k \\
+	&= I \quad\qquad (A^k = 0)
+\end{aligned}
+\]
+و اگر این ماتریس را از طرف چپ در $I - A$ ضرب کنیم به نتیجه مشابهی می‌رسیم. بنابراین ماتریس ارائه شده وارون $I - A$ خواهد بود.
+\qed
+\section{\lr{MAP}}
+\begin{enumerate}[1.]
+	\item
+	برای محاسبه توزیع مشترک داریم:
+	\[
+	\begin{aligned}
+		f_{\mu, X, Y}(t,x,y)	&= f_{\mu}(t).f_{X,Y|\mu}(x,y|t) \\[0.75em]
+								&= f_{\mu}(t).f_{X|\mu}(x|t).f_{Y|\mu}(y|t) &&\quad (\text{$X$ و $Y$ مستقل هستند}) \\[0.75em]
+								&= 1 \times \frac{1}{\sqrt{2\pi}}e^{-\frac{(x-t)^2}{2}} \times \frac{1}{\sqrt{2\pi}}e^{-\frac{(y-t)^2}{2}} \\[0.75em]
+								&= \frac{1}{2\pi}e^{-\frac{(x-t)^2+(y-t)^2}{2}}
+	\end{aligned}
+	\]
+	\item
+	برای پیدا کردن تخمین‌گر \lr{MAP} پارامتر $\mu$ با استفاده از داده‌های $X$ و $Y$ داریم:
+	\[
+	\mu_{MAP} = \argmax_{\mu} f_{\mu | X,Y} = \argmax_\mu f_{\mu,X,Y}
+	\]
+	که با استفاده از قسمت یک داریم:
+	\[
+	\begin{gathered}
+		\begin{aligned}
+			\frac{d}{d \mu} \ln(f_{\mu, X, Y})	&= \frac{d}{d \mu} \left(-\ln(2\pi) - \frac{(x-\mu)^2 + (y-\mu)^2}{2})\right)\\
+			&= 0 + (x - \mu) + (y - \mu)
+		\end{aligned}\\[1em]
+		\begin{aligned}
+			\implies & x - \mu_{MAP} + y - \mu_{MAP} = 0 \\[0.75em]
+			\implies & \mu_{MAP} = \frac{x+y}{2}
+		\end{aligned}
+	\end{gathered}
+	\]
+\end{enumerate}
+\qed
+\end{document}
+
+
+
